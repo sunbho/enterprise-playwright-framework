@@ -1,0 +1,128 @@
+# -----------------------------------------------------------------------------
+# Java 22 / JVM
+# -----------------------------------------------------------------------------
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+hs_err_pid*
+replay_pid*
+*.hprof
+.java-version
+
+# -----------------------------------------------------------------------------
+# Maven
+# -----------------------------------------------------------------------------
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# Maven wrapper scripts and properties should remain version controlled.
+!.mvn/wrapper/maven-wrapper.properties
+!mvnw
+!mvnw.cmd
+
+# -----------------------------------------------------------------------------
+# Playwright Java test artifacts
+# -----------------------------------------------------------------------------
+playwright-report/
+test-results/
+blob-report/
+allure-results/
+allure-report/
+screenshots/
+traces/
+videos/
+downloads/
+artifacts/
+*.zip
+*.trace
+*.webm
+
+# Playwright browser binaries when installed inside the repository.
+ms-playwright/
+.playwright/
+
+# Preserve intentionally committed test fixtures under source resources.
+!src/**/resources/**/downloads/
+!src/**/resources/**/*.zip
+
+# -----------------------------------------------------------------------------
+# Test and coverage reports
+# -----------------------------------------------------------------------------
+surefire-reports/
+failsafe-reports/
+jacoco.exec
+jacoco*.exec
+coverage/
+.nyc_output/
+
+# -----------------------------------------------------------------------------
+# Logs and runtime output
+# -----------------------------------------------------------------------------
+logs/
+*.log
+*.log.*
+*.out
+*.err
+*.pid
+*.pid.lock
+
+# -----------------------------------------------------------------------------
+# IntelliJ IDEA
+# -----------------------------------------------------------------------------
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+# -----------------------------------------------------------------------------
+# Visual Studio Code
+# -----------------------------------------------------------------------------
+.vscode/
+*.code-workspace
+.history/
+
+# -----------------------------------------------------------------------------
+# GitHub Actions generated output
+# -----------------------------------------------------------------------------
+# Keep .github/workflows and repository automation configuration tracked.
+.github/actions-cache/
+.github/test-results/
+.github/artifacts/
+
+# -----------------------------------------------------------------------------
+# Environment files and local secrets
+# -----------------------------------------------------------------------------
+.env
+.env.*
+!.env.example
+*.local.properties
+secrets.properties
+
+# -----------------------------------------------------------------------------
+# Temporary, editor, and operating-system files
+# -----------------------------------------------------------------------------
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*~
+.#*
+\#*\#
+.DS_Store
+._*
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
