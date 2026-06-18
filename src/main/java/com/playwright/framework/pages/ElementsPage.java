@@ -2,28 +2,28 @@ package com.playwright.framework.pages;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
-import com.microsoft.playwright.options.AriaRole;
+import com.microsoft.playwright.options.WaitForSelectorState;
 
 /**
  * Page object representing the DemoQA Elements section.
  *
- * <p>This class contains section-menu locators and navigation operations only.
- * Assertions and test-specific behavior belong in the test layer.</p>
+ * Uses BasePage helpers (navigate, getLocator, etc.) and waits for locators
+ * instead of sleeping with page.waitForTimeout.
  */
-public final class ElementsPage {
+public final class ElementsPage extends BasePage {
 
     private static final String ELEMENTS_URL = "https://demoqa.com/elements";
 
-    private final Page page;
-    private final Locator textBoxMenu;
-    private final Locator checkBoxMenu;
-    private final Locator radioButtonMenu;
-    private final Locator webTablesMenu;
-    private final Locator buttonsMenu;
-    private final Locator linksMenu;
-    private final Locator brokenLinksMenu;
-    private final Locator uploadDownloadMenu;
-    private final Locator dynamicPropertiesMenu;
+    // Use selector strings (role/text selectors are supported by Playwright)
+    private static final String TEXT_BOX_SELECTOR = "text=Text Box"; // or "text=Text Box"
+    private static final String CHECK_BOX_SELECTOR = "text=Check Box"; // replace if needed
+    private static final String RADIO_BUTTON_SELECTOR = "text=Radio Button";
+    private static final String WEB_TABLES_SELECTOR = "text=Web Tables";
+    private static final String BUTTONS_SELECTOR = "text=Buttons";
+    private static final String LINKS_SELECTOR = "text=Links";
+    private static final String BROKEN_LINKS_SELECTOR = "text=Broken Links - Images";
+    private static final String UPLOAD_DOWNLOAD_SELECTOR = "text=Upload and Download";
+    private static final String DYNAMIC_PROPERTIES_SELECTOR = "text=Dynamic Properties";
 
     /**
      * Creates an Elements page object backed by the supplied Playwright page.
@@ -31,30 +31,27 @@ public final class ElementsPage {
      * @param page active Playwright page
      */
     public ElementsPage(Page page) {
-        this.page = page;
-        this.textBoxMenu = page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Text Box"));// TODO Add locator
-        this.checkBoxMenu = page.locator("[data-testid='TODO-check-box-menu']"); // TODO Add locator
-        this.radioButtonMenu = page.locator("[data-testid='TODO-radio-button-menu']"); // TODO Add locator
-        this.webTablesMenu = page.locator("[data-testid='TODO-web-tables-menu']"); // TODO Add locator
-        this.buttonsMenu = page.locator("[data-testid='TODO-buttons-menu']"); // TODO Add locator
-        this.linksMenu = page.locator("[data-testid='TODO-links-menu']"); // TODO Add locator
-        this.brokenLinksMenu = page.locator("[data-testid='TODO-broken-links-menu']"); // TODO Add locator
-        this.uploadDownloadMenu = page.locator("[data-testid='TODO-upload-download-menu']"); // TODO Add locator
-        this.dynamicPropertiesMenu = page.locator("[data-testid='TODO-dynamic-properties-menu']"); // TODO Add locator
+        super(page); // BasePage protects against null page
     }
 
     /**
      * Navigates directly to the DemoQA Elements section.
      */
     public void navigateToElementsPage() {
-        page.navigate(ELEMENTS_URL);
+        navigate(ELEMENTS_URL); // BasePage.navigate
     }
+
+//    private Locator waitForVisible(String selector) {
+//        Locator locator = getLocator(selector);
+//        locator.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
+//        return locator;
+//    }
 
     /**
      * Opens the Text Box page.
      */
     public TextBoxPage openTextBoxPage() {
-        textBoxMenu.click();
+        waitForVisibleLocator(TEXT_BOX_SELECTOR).click();
         return new TextBoxPage(page);
     }
 
@@ -62,55 +59,55 @@ public final class ElementsPage {
      * Opens the Check Box page.
      */
     public void openCheckBoxPage() {
-        checkBoxMenu.click();
+        waitForVisibleLocator(CHECK_BOX_SELECTOR).click();
     }
 
     /**
      * Opens the Radio Button page.
      */
     public void openRadioButtonPage() {
-        radioButtonMenu.click();
+        waitForVisibleLocator(RADIO_BUTTON_SELECTOR).click();
     }
 
     /**
      * Opens the Web Tables page.
      */
     public void openWebTablesPage() {
-        webTablesMenu.click();
+        waitForVisibleLocator(WEB_TABLES_SELECTOR).click();
     }
 
     /**
      * Opens the Buttons page.
      */
     public void openButtonsPage() {
-        buttonsMenu.click();
+        waitForVisibleLocator(BUTTONS_SELECTOR).click();
     }
 
     /**
      * Opens the Links page.
      */
     public void openLinksPage() {
-        linksMenu.click();
+        waitForVisibleLocator(LINKS_SELECTOR).click();
     }
 
     /**
      * Opens the Broken Links - Images page.
      */
     public void openBrokenLinksPage() {
-        brokenLinksMenu.click();
+        waitForVisibleLocator(BROKEN_LINKS_SELECTOR).click();
     }
 
     /**
      * Opens the Upload and Download page.
      */
     public void openUploadDownloadPage() {
-        uploadDownloadMenu.click();
+        waitForVisibleLocator(UPLOAD_DOWNLOAD_SELECTOR).click();
     }
 
     /**
      * Opens the Dynamic Properties page.
      */
     public void openDynamicPropertiesPage() {
-        dynamicPropertiesMenu.click();
+        waitForVisibleLocator(DYNAMIC_PROPERTIES_SELECTOR).click();
     }
 }
