@@ -4,12 +4,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
 import java.util.Properties;
+import com.playwright.framework.utils.LoggerUtils;
+import org.slf4j.Logger;
 
 /**
  * Provides read-only access to framework configuration loaded from the classpath.
  */
 public final class ConfigManager {
 
+    private static final Logger LOGGER = LoggerUtils.getLogger(ConfigManager.class);
     private static final String CONFIG_FILE = "config.properties";
 
     private final Properties properties;
@@ -67,6 +70,7 @@ public String getProperty(String key) {
             }
 
             loadedProperties.load(inputStream);
+            LOGGER.info("Loaded framework configuration from {}", CONFIG_FILE);
             return loadedProperties;
         } catch (IOException exception) {
             throw new IllegalStateException(

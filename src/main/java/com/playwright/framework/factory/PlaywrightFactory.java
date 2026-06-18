@@ -6,6 +6,8 @@ import com.microsoft.playwright.BrowserType;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
 import com.playwright.framework.config.ConfigManager;
+import com.playwright.framework.utils.LoggerUtils;
+import org.slf4j.Logger;
 
 import java.util.Locale;
 
@@ -19,6 +21,7 @@ import java.util.Locale;
  */
 public final class PlaywrightFactory {
 
+    private static final Logger LOGGER = LoggerUtils.getLogger(PlaywrightFactory.class);
     private static final String BROWSER_PROPERTY = "browser";
     private static final String HEADLESS_PROPERTY = "headless";
     private static final String TIMEOUT_PROPERTY = "timeout"; // timeout in milliseconds
@@ -52,6 +55,7 @@ public final class PlaywrightFactory {
     public static Page initializeBrowser() {
         Page existingPage = PAGE.get();
         if (existingPage != null) {
+            LOGGER.info("Reusing browser page for thread {}", Thread.currentThread().getName());
             return existingPage;
         }
 
@@ -62,6 +66,10 @@ public final class PlaywrightFactory {
                 config.getBoolean("startMaximized");
 
         try {
+            LOGGER.info(
+                    "Initializing {} browser with headless mode set to {}",
+                    browserName,
+                    headless);
             Playwright playwright = Playwright.create();
             PLAYWRIGHT.set(playwright);
 
@@ -85,8 +93,11 @@ public final class PlaywrightFactory {
 
             Page page = browserContext.newPage();
             PAGE.set(page);
+            LOGGER.info("Browser initialization completed for thread {}",
+                    Thread.currentThread().getName());
             return page;
         } catch (RuntimeException exception) {
+            LOGGER.error("Browser initialization failed for {}", browserName, exception);
             closeBrowser();
             throw new IllegalStateException(
                     "Failed to initialize Playwright browser '" + browserName + "'", exception);
@@ -110,6 +121,36 @@ public final class PlaywrightFactory {
     }
 
     /**
+     * Returns the browser associated with the current execution thread.
+     *
+     * @return current thread's browser
+     * @throws IllegalStateException if browser initialization has not completed
+     */
+    public static Browser getBrowser() {
+        Browser browser = BROWSER.get();
+        if (browser == null) {
+            throw new IllegalStateException(
+                    "Browser is not initialized for the current thread.");
+        }
+        return browser;
+    }
+
+    /**
+     * Returns the browser context associated with the current execution thread.
+     *
+     * @return current thread's browser context
+     * @throws IllegalStateException if browser initialization has not completed
+     */
+    public static BrowserContext getBrowserContext() {
+        BrowserContext browserContext = BROWSER_CONTEXT.get();
+        if (browserContext == null) {
+            throw new IllegalStateException(
+                    "Browser context is not initialized for the current thread.");
+        }
+        return browserContext;
+    }
+
+    /**
      * Closes all Playwright resources owned by the current thread in reverse
      * creation order and removes their {@link ThreadLocal} references.
      *
@@ -117,6 +158,8 @@ public final class PlaywrightFactory {
      * even when initialization was incomplete.</p>
      */
     public static void closeBrowser() {
+        LOGGER.info("Closing Playwright resources for thread {}",
+                Thread.currentThread().getName());
         closeResource(PAGE.get());
         closeResource(BROWSER_CONTEXT.get());
         closeResource(BROWSER.get());
@@ -126,6 +169,7 @@ public final class PlaywrightFactory {
         BROWSER_CONTEXT.remove();
         BROWSER.remove();
         PLAYWRIGHT.remove();
+        LOGGER.info("Playwright resources closed");
     }
 
     private static BrowserType selectBrowserType(Playwright playwright, String browserName) {
@@ -175,8 +219,8 @@ public final class PlaywrightFactory {
 
         try {
             resource.close();
-        } catch (Exception ignored) {
-            // Continue closing remaining resources during teardown.
+        } catch (Exception exception) {
+            LOGGER.warn("Unable to close Playwright resource cleanly", exception);
         }
     }
 }
