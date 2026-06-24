@@ -1,5 +1,7 @@
 package com.playwright.framework.tests;
 
+import com.playwright.framework.dataproviders.GenericDataProvider;
+import com.playwright.framework.models.TextBoxData;
 import com.playwright.framework.pages.HomePage;
 import com.playwright.framework.pages.ElementsPage;
 import com.playwright.framework.pages.TextBoxPage;
@@ -22,21 +24,17 @@ public class AddTextVerificationTest extends BaseTest {
 
     @Test
     public void testAddTextAndVerifySubmission() {
-
         // Step 1: Navigate to Home Page and click Elements
         HomePage homePage = new HomePage(page);
         homePage.navigateToHomePage();
         ElementsPage elementsPage = homePage.openElementsPage();
         WaitUtils.waitForLoadState(page);
-
         // Step 2: Click on Text Box menu item
         elementsPage.openTextBoxPage();
-
         // Step 3: Fill form with test data
         TextBoxPage textBoxPage = new TextBoxPage(page);
         WaitUtils.waitForLoadState(page);
         textBoxPage.submitFormWithData(FULL_NAME, EMAIL, CURRENT_ADDRESS, PERMANENT_ADDRESS);
-
         // Step 4: Verify submitted values
         String nameOutput = textBoxPage.getNameOutput();
         String emailOutput = textBoxPage.getEmailOutput();
@@ -45,4 +43,25 @@ public class AddTextVerificationTest extends BaseTest {
         AssertionUtils.verifyContains(emailOutput, "Email:" + EMAIL);
         AssertionUtils.verifyContains(outputSectionText, "Current Address :" + CURRENT_ADDRESS);
     }
+
+    @Test(
+            dataProvider = "textBoxFormData",
+            dataProviderClass = GenericDataProvider.class,
+            description = "Submit DemoQA testBox form with JSON data")
+    public void testAddTextAndVerifySubmissionDataProvider(TextBoxData data) {
+        // Step 1: Navigate to Home Page and click Elements
+        HomePage homePage = new HomePage(page);
+        homePage.navigateToHomePage();
+        ElementsPage elementsPage = homePage.openElementsPage();
+        WaitUtils.waitForLoadState(page);
+        // Step 2: Click on Text Box menu item
+        elementsPage.openTextBoxPage();
+        // Step 3: Fill form with test data
+        TextBoxPage textBoxPage = new TextBoxPage(page);
+        WaitUtils.waitForLoadState(page);
+        textBoxPage.submitFormWithData(data);
+        textBoxPage.verifyTextData(data);
+    }
+
+
 }

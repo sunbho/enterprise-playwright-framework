@@ -1,8 +1,8 @@
 package com.playwright.framework.pages;
 
-import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
-import com.microsoft.playwright.options.AriaRole;
+import com.playwright.framework.models.TextBoxData;
+import com.playwright.framework.utils.AssertionUtils;
 
 /**
  * Page object representing the DemoQA Text Box page.
@@ -31,15 +31,6 @@ public final class TextBoxPage extends BasePage{
      */
     public TextBoxPage(Page page) {
         super(page);
-//        this.page = page;
-//        this.fullNameTextBox = page.getByRole(AriaRole.TEXTBOX, new Page.GetByRoleOptions().setName("Full Name"));
-//        this.emailTextBox = page.getByRole(AriaRole.TEXTBOX, new Page.GetByRoleOptions().setName("name@example.com"));
-//        this.currentAddressTextBox = page.getByRole(AriaRole.TEXTBOX, new Page.GetByRoleOptions().setName("Current Address"));
-//        this.permanentAddressTextBox = page.locator("#permanentAddress");
-//        this.submitButton = page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Submit"));
-//        this.nameOutput = page.locator("#name");
-//        this.emailOutput = page.locator("#email");
-//        this.outputSection = page.locator("#output");
     }
 
     /**
@@ -57,8 +48,6 @@ public final class TextBoxPage extends BasePage{
     public void fillFullName(String fullName) {
         waitForVisibleLocator(fullNameTextBox).click();
         type(fullNameTextBox, fullName);
-//        fullNameTextBox.click();
-//        fullNameTextBox.fill(fullName);
     }
 
     /**
@@ -69,8 +58,6 @@ public final class TextBoxPage extends BasePage{
     public void fillEmail(String email) {
         waitForVisibleLocator(emailTextBox).click();
         type(emailTextBox, email);
-//        emailTextBox.click();
-//        emailTextBox.fill(email);
     }
 
     /**
@@ -142,4 +129,28 @@ public final class TextBoxPage extends BasePage{
         fillPermanentAddress(permanentAddress);
         submitForm();
     }
+
+    /**
+     * Submits the form using DataProvider.
+     * @param textBoxData TextBoxData json
+     */
+    public void submitFormWithData(TextBoxData  textBoxData) {
+        fillFullName(textBoxData.getFullName());
+        fillEmail(textBoxData.getEmail());
+        fillCurrentAddress(textBoxData.getAddress());
+        fillPermanentAddress(textBoxData.getPermanentAddress());
+        submitForm();
+    }
+
+    /**
+     * Verify the form  data using DataProvider.
+     * @param textBoxData TextBoxData json
+     */
+    public void verifyTextData(TextBoxData  textBoxData){
+        AssertionUtils.verifyContains(getNameOutput(), "Name:" + textBoxData.getFullName());
+        AssertionUtils.verifyContains(getEmailOutput(), "Email:" + textBoxData.getEmail());
+        AssertionUtils.verifyContains(getOutputSectionText(), "Current Address :" + textBoxData.getAddress());
+    }
+
+
 }

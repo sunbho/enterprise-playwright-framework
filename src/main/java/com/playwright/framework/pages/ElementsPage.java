@@ -1,8 +1,6 @@
 package com.playwright.framework.pages;
 
-import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
-import com.microsoft.playwright.options.WaitForSelectorState;
 
 /**
  * Page object representing the DemoQA Elements section.
@@ -41,12 +39,6 @@ public final class ElementsPage extends BasePage {
         navigate(ELEMENTS_URL); // BasePage.navigate
     }
 
-//    private Locator waitForVisible(String selector) {
-//        Locator locator = getLocator(selector);
-//        locator.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
-//        return locator;
-//    }
-
     /**
      * Opens the Text Box page.
      */
@@ -58,8 +50,9 @@ public final class ElementsPage extends BasePage {
     /**
      * Opens the Check Box page.
      */
-    public void openCheckBoxPage() {
+    public CheckBoxPage openCheckBoxPage() {
         waitForVisibleLocator(CHECK_BOX_SELECTOR).click();
+        return new CheckBoxPage(page);
     }
 
     /**
