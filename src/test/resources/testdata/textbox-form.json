@@ -1,0 +1,20 @@
+[
+  {
+    "fullName": "Sunil",
+    "email": "sunil.bhosale@example.com",
+    "address": "Pune, Maharashtra, India",
+    "permanentAddress": "Same As Above"
+  },
+  {
+    "fullName": "Aarav",
+    "email": "aarav.mehta@example.com",
+    "address": "Bengaluru, Karnataka, India",
+    "permanentAddress": "Same As Above"
+  },
+  {
+    "fullName": "Neha",
+    "email": "neha.patil@example.com",
+    "address": "Mumbai, Maharashtra, India",
+    "permanentAddress": "Same As Above"
+  }
+]

@@ -1,0 +1,41 @@
+[
+  {
+    "firstName": "Sunil",
+    "lastName": "Bhosale",
+    "email": "sunil.bhosale@example.com",
+    "gender": "Male",
+    "mobile": "9876543210",
+    "subject": "Maths",
+    "hobbies": ["Sports"],
+    "address": "Pune, Maharashtra, India",
+    "state": "NCR",
+    "city": "Delhi",
+    "picture": "testdata/images/profile-one.png"
+  },
+  {
+    "firstName": "Aarav",
+    "lastName": "Mehta",
+    "email": "aarav.mehta@example.com",
+    "gender": "Male",
+    "mobile": "9123456780",
+    "subject": "Computer Science",
+    "hobbies": ["Reading", "Music"],
+    "address": "Bengaluru, Karnataka, India",
+    "state": "Haryana",
+    "city": "Karnal",
+    "picture": "testdata/images/profile-two.png"
+  },
+  {
+    "firstName": "Neha",
+    "lastName": "Patil",
+    "email": "neha.patil@example.com",
+    "gender": "Female",
+    "mobile": "9988776655",
+    "subject": "English",
+    "hobbies": ["Sports", "Reading", "Music"],
+    "address": "Mumbai, Maharashtra, India",
+    "state": "Rajasthan",
+    "city": "Jaipur",
+    "picture": "testdata/images/profile-three.png"
+  }
+]
