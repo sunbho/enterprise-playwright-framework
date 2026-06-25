@@ -26,8 +26,8 @@
         <maven.compiler.version>3.14.1</maven.compiler.version>
         <maven.surefire.version>3.5.5</maven.surefire.version>
 
-        <testng.parallel>methods</testng.parallel>
-        <testng.thread.count>1</testng.thread.count>
+<!--        <testng.parallel>tests</testng.parallel>-->
+<!--        <testng.thread.count>3</testng.thread.count>-->
     </properties>
 
     <dependencies>

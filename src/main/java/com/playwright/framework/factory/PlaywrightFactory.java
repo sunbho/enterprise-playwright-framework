@@ -55,7 +55,7 @@ public final class PlaywrightFactory {
     public static Page initializeBrowser() {
         Page existingPage = PAGE.get();
         if (existingPage != null) {
-            LOGGER.info("Reusing browser page for thread {}", Thread.currentThread().getName());
+            LOGGER.info("{} Reusing existing page", threadLabel());
             return existingPage;
         }
 
@@ -66,10 +66,8 @@ public final class PlaywrightFactory {
                 config.getBoolean("startMaximized");
 
         try {
-            LOGGER.info(
-                    "Initializing {} browser with headless mode set to {}",
-                    browserName,
-                    headless);
+            LOGGER.info("{} Launching {} browser (headless={})",
+                    threadLabel(), browserName, headless);
             Playwright playwright = Playwright.create();
             PLAYWRIGHT.set(playwright);
 
@@ -77,6 +75,7 @@ public final class PlaywrightFactory {
             Browser browser = browserType.launch(
                     new BrowserType.LaunchOptions().setHeadless(headless).setSlowMo(1000));
             BROWSER.set(browser);
+            LOGGER.info("{} Browser Created", threadLabel());
 
             BrowserContext browserContext =
                     browser.newContext(
@@ -93,11 +92,11 @@ public final class PlaywrightFactory {
 
             Page page = browserContext.newPage();
             PAGE.set(page);
-            LOGGER.info("Browser initialization completed for thread {}",
-                    Thread.currentThread().getName());
+            LOGGER.info("{} Page Created", threadLabel());
             return page;
         } catch (RuntimeException exception) {
-            LOGGER.error("Browser initialization failed for {}", browserName, exception);
+            LOGGER.error("{} Browser initialization failed for {}",
+                    threadLabel(), browserName, exception);
             closeBrowser();
             throw new IllegalStateException(
                     "Failed to initialize Playwright browser '" + browserName + "'", exception);
@@ -109,6 +108,18 @@ public final class PlaywrightFactory {
      *
      * @return the current thread's page
      * @throws IllegalStateException if {@link #initializeBrowser()} has not been called
+     */
+    public static Playwright getPlaywright() {
+        Playwright playwright = PLAYWRIGHT.get();
+        if (playwright == null) {
+            throw new IllegalStateException(
+                    "Playwright is not initialized for the current thread.");
+        }
+        return playwright;
+    }
+
+    /**
+     * Returns the Playwright page associated with the current thread.
      */
     public static Page getPage() {
         Page page = PAGE.get();
@@ -158,18 +169,20 @@ public final class PlaywrightFactory {
      * even when initialization was incomplete.</p>
      */
     public static void closeBrowser() {
-        LOGGER.info("Closing Playwright resources for thread {}",
-                Thread.currentThread().getName());
-        closeResource(PAGE.get());
-        closeResource(BROWSER_CONTEXT.get());
-        closeResource(BROWSER.get());
-        closeResource(PLAYWRIGHT.get());
-
-        PAGE.remove();
-        BROWSER_CONTEXT.remove();
-        BROWSER.remove();
-        PLAYWRIGHT.remove();
-        LOGGER.info("Playwright resources closed");
+        LOGGER.info("{} Closing browser resources", threadLabel());
+        try {
+            closeResource(PAGE.get(), "Page");
+            closeResource(BROWSER_CONTEXT.get(), "Browser context");
+            closeResource(BROWSER.get(), "Browser");
+            closeResource(PLAYWRIGHT.get(), "Playwright");
+            LOGGER.info("{} Browser Closed", threadLabel());
+        } finally {
+            PAGE.remove();
+            BROWSER_CONTEXT.remove();
+            BROWSER.remove();
+            PLAYWRIGHT.remove();
+            LOGGER.info("{} ThreadLocal Cleanup Completed", threadLabel());
+        }
     }
 
     private static BrowserType selectBrowserType(Playwright playwright, String browserName) {
@@ -212,7 +225,7 @@ public final class PlaywrightFactory {
         }
     }
 
-    private static void closeResource(AutoCloseable resource) {
+    private static void closeResource(AutoCloseable resource, String resourceName) {
         if (resource == null) {
             return;
         }
@@ -220,7 +233,12 @@ public final class PlaywrightFactory {
         try {
             resource.close();
         } catch (Exception exception) {
-            LOGGER.warn("Unable to close Playwright resource cleanly", exception);
+            LOGGER.warn("{} Unable to close {} cleanly",
+                    threadLabel(), resourceName, exception);
         }
+    }
+    private static String threadLabel() {
+        Thread thread = Thread.currentThread();
+        return "[Thread-" + thread.threadId() + ":" + thread.getName() + "]";
     }
 }

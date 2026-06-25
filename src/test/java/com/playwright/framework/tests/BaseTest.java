@@ -2,6 +2,8 @@ package com.playwright.framework.tests;
 
 import com.microsoft.playwright.Page;
 import com.playwright.framework.factory.PlaywrightFactory;
+import com.playwright.framework.utils.AllureUtils;
+import io.qameta.allure.Allure;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
@@ -17,7 +19,14 @@ public abstract class BaseTest {
      */
     @BeforeMethod(alwaysRun = true)
     public void setUp() {
-        page = PlaywrightFactory.initializeBrowser();
+        PlaywrightFactory.initializeBrowser();
+        page = PlaywrightFactory.getPage();
+
+        Thread thread = Thread.currentThread();
+        String threadInformation =
+                "Thread-" + thread.threadId() + " (" + thread.getName() + ")";
+        Allure.parameter("Execution Thread", threadInformation);
+        AllureUtils.attachText("Thread Information", threadInformation);
     }
 
     /**
