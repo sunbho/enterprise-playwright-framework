@@ -1,76 +1,94 @@
-# Playwright Java Automation Framework
+# Enterprise Playwright Java Automation Framework
 
-Enterprise-oriented browser and API automation framework scaffold built with Maven and organized around Playwright for Java.
+An enterprise-style UI automation framework built with **Playwright Java**, **Java 22**, **TestNG**, and **Maven**. This project is part of my hands-on learning journey to explore modern automation framework design using industry best practices.
 
-## Current Status
+The framework is being developed incrementally, with each milestone focusing on a specific enterprise automation capability.
 
-The repository currently contains the intended package structure only. Framework classes, Playwright dependencies, test runners, configuration resources, and executable tests have not yet been implemented.
+## Tech Stack
 
-The existing `pom.xml` defines Java 22 and contains the Maven archetype's JUnit 4.11 dependency and older plugin-management defaults. These are placeholders to be modernized during implementation.
+* Java 22
+* Playwright Java
+* TestNG
+* Maven
+* Jackson
+* Log4j2
+* Allure Report
+
+## Current Features
+
+* Configuration-driven framework
+* Page Object Model (POM)
+* Reusable BasePage
+* Playwright Inspector support
+* Logging with Log4j2
+* Allure reporting
+* Screenshot capture on failures
+* TestNG listeners
+* JSON data-driven testing
+* POJO-based test data models
+* Generic JSON reader
+* TestNG DataProviders
+* Thread-safe parallel execution using ThreadLocal
 
 ## Project Structure
 
 ```text
-playwright-framework/
-|-- pom.xml
-|-- README.md
-|-- Architecture.md
-|-- Roadmap.md
-`-- src/
-    |-- main/
-    |   `-- java/com/playwright/framework/
-    |       |-- annotations/
-    |       |-- api/
-    |       |-- components/
-    |       |-- config/
-    |       |-- constants/
-    |       |-- exceptions/
-    |       |-- factory/
-    |       |-- listeners/
-    |       |-- models/
-    |       |-- pages/
-    |       |-- reporting/
-    |       `-- utils/
-    `-- test/
-        `-- java/com/playwright/framework/
-            |-- data/
-            |-- runners/
-            `-- tests/
+src/main/java
+├── config
+├── factory
+├── listeners
+├── models
+├── pages
+├── reporting
+└── utils
+
+src/test/java
+├── dataproviders
+├── tests
+└── resources
 ```
 
-Generated Maven output under `target/` is intentionally excluded from the source tree.
+## Learning Roadmap
 
-## Package Responsibilities
+Completed
 
-| Package | Purpose |
-|---|---|
-| `annotations` | Framework-specific metadata for tests, features, ownership, retries, or reporting. |
-| `api` | API clients, request builders, response validation, and API test support. |
-| `components` | Reusable UI fragments such as navigation bars, dialogs, tables, and forms. |
-| `config` | Typed configuration loading, environment selection, and validation. |
-| `constants` | Stable framework constants and shared enumerations. |
-| `exceptions` | Domain-specific exceptions with actionable failure context. |
-| `factory` | Controlled creation and lifecycle management of Playwright, browser, context, and page objects. |
-| `listeners` | Test lifecycle hooks for diagnostics, logging, artifacts, and reporting events. |
-| `models` | Immutable configuration, test-data, API, and domain data objects. |
-| `pages` | Page Objects that expose business actions and page-level assertions. |
-| `reporting` | Report adapters and attachment handling for screenshots, traces, videos, and logs. |
-| `utils` | Small, stateless utilities that do not belong to a domain package. |
-| `data` | Test data providers, builders, fixtures, and test-only model factories. |
-| `runners` | Suite definitions, tags, profiles, or other test execution entry points. |
-| `tests` | Test scenarios organized by product feature or business capability. |
+* Framework Foundation
+* Configuration Management
+* Page Object Model
+* Reusable Framework Layer
+* Logging & Reporting
+* JSON Data-Driven Testing
+* Parallel Execution
 
-## Planned Capabilities
+Planned
 
-- Thread-safe Playwright and browser lifecycle management
-- Environment-aware, typed configuration
-- Page Object and reusable component layers
-- Parallel and cross-browser execution
-- UI and API test support
-- Failure screenshots, traces, videos, and structured logs
-- Extensible reporting and CI-friendly result publishing
-- Test data builders and external data sources
-- Tags, suites, retries, and execution profiles
+* Environment Management
+* API Automation
+* Component Object Pattern
+* GitHub Actions CI/CD
+* Docker Execution
+* Playwright Trace Viewer
 
-See [Architecture.md](Architecture.md) for design constraints and [Roadmap.md](Roadmap.md) for the phased implementation plan.
+## Running the Tests
 
+```bash
+mvn clean test
+```
+
+Run using a specific browser:
+
+```bash
+mvn test -Dbrowser=firefox
+```
+
+Run in headless mode:
+
+```bash
+mvn test -Dheadless=true
+```
+
+## Why This Project?
+
+The goal of this project is to build and understand an enterprise-grade Playwright automation framework from scratch rather than relying on templates. Each feature is implemented step by step to gain practical experience with framework architecture, maintainability, scalability, and modern automation practices.
+
+Feedback and suggestions are always welcome.
